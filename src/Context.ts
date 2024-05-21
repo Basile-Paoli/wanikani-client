@@ -1,4 +1,5 @@
-import {createContext} from "react";
 
 
-export const ApiTokenContext = createContext( "");
+
+
+export const apiUrl : string = "https://api.wanikani.com/v2"

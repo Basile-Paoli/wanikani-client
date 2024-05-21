@@ -1,28 +1,24 @@
-import { useState} from "react";
+import {useState} from "react";
 import Login from "./components/Login.tsx";
 import Profile from "./components/Profile.tsx";
 import Navbar from "./components/Navbar.tsx";
-import { ApiTokenContext } from "./Context.ts";
+import Reviews from "./components/Reviews";
+import Lessons from "./components/Lessons.tsx";
 
 const storedToken = localStorage.getItem("apiToken")
 
 function App() {
-    const [apiToken, setApiToken] = useState(storedToken || "");
+    const [isLoggedIn, setIsLoggedIn] = useState(!!storedToken);
     const [page, setPage] = useState("profile");
-    const updateApiToken = (newToken: string) => {
-        setApiToken(newToken)
-        localStorage.setItem("apiToken", newToken)
-    }
     return (
-        apiToken ?
+        isLoggedIn ?
             <>
-                <Navbar updateApiToken={updateApiToken} updatePage={setPage}/>
-                <ApiTokenContext.Provider value={apiToken}>
-
-                    {page==="profile"&& <Profile/>}
-                </ApiTokenContext.Provider>
+                <Navbar setIsLoggedIn={setIsLoggedIn} updatePage={setPage}/>
+                {page === "reviews" && <Reviews/>}
+                {page === "lessons" && <Lessons/>}
+                {page === "profile" && <Profile/>}
             </>
-            : <Login updateApiToken={updateApiToken}/>
+            : <Login setIsLoggedIn={setIsLoggedIn}/>
 
 
     )

@@ -1,5 +1,4 @@
-import {useContext, useEffect, useState} from "react";
-import {ApiTokenContext} from "../Context";
+import { useEffect, useState} from "react";
 import Pog from "../assets/pog.png";
 
 type UserInfo = {
@@ -7,11 +6,10 @@ type UserInfo = {
     level: number
 }
 export default function Profile() {
-    const apiToken = useContext(ApiTokenContext);
     const [userInfo , setUserInfo] = useState<UserInfo>()
     useEffect(() => {
         fetch("https://api.wanikani.com/v2/user", {
-            headers: {Authorization: `Bearer ${apiToken}`}
+            headers: {Authorization: `Bearer ${localStorage.getItem("apiToken")}`}
         })
             .then((response) => {
                 if (!response.ok) {
@@ -23,7 +21,7 @@ export default function Profile() {
                 }
 
             })
-    }, [apiToken]);
+    }, []);
 
     return (
         <>

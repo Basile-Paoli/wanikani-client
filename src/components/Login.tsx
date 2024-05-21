@@ -1,10 +1,10 @@
 import {useRef} from "react";
 
 type propsType = {
-    updateApiToken: (newToken: string) => void
+    setIsLoggedIn: (isLoggedIn: boolean) => void,
 }
 
-export default function Login({updateApiToken}: propsType) {
+export default function Login({setIsLoggedIn}: propsType) {
     const inputRef = useRef<HTMLInputElement>(null);
 
     const submitHandler = () => {
@@ -16,7 +16,8 @@ export default function Login({updateApiToken}: propsType) {
                 if (!response.ok) {
                     console.log("Invalid token")
                 } else {
-                    updateApiToken(token)
+                    localStorage.setItem("apiToken", token)
+                    setIsLoggedIn(true)
                 }
 
             })
