@@ -3,28 +3,28 @@ import getSubject, {Subject} from "./getSubject.ts";
 
 type Assignment = {
     data: {
-        subject_id: number
-        subject_type: string
+        subject_id: number,
+        subject_type: string,
     }
-}
+};
 
 export function useSubjectManager(fetchUrl: string): [currentSubject: Subject | null, switchToNextAssignment: () => void, currentAssignment : Assignment] {
-    const [assignments, setAssignments] = useState<Assignment[]>([])
-    const [currentAssignment, setCurrentAssignment] = useState(0)
-    const [currentSubject, setCurrentSubject] = useState<Subject | null>(null)
-    const [nextSubject, setNextSubject] = useState<Subject | null>(null)
+    const [assignments, setAssignments] = useState<Assignment[]>([]);
+    const [currentAssignment, setCurrentAssignment] = useState(0);
+    const [currentSubject, setCurrentSubject] = useState<Subject | null>(null);
+    const [nextSubject, setNextSubject] = useState<Subject | null>(null);
     useEffect(() => {
         fetch(fetchUrl, {
             headers: {Authorization: `Bearer ${localStorage.getItem("apiToken")}`}
         })
             .then((response) => response.json())
             .then((data) => {
-                const assignmentsList = data.data
-                setAssignments(assignmentsList)
+                const assignmentsList = data.data;
+                setAssignments(assignmentsList);
                 if (assignmentsList.length > 0) {
                     getSubject(assignmentsList[0].data.subject_id)
                         .then((subject) => {
-                            if (subject) setCurrentSubject(subject)
+                            if (subject) setCurrentSubject(subject);
                         })
                 }
 
@@ -41,20 +41,20 @@ export function useSubjectManager(fetchUrl: string): [currentSubject: Subject | 
         }
         getSubject(assignments[currentAssignment + 1].data.subject_id)
             .then((subject) => {
-                if (subject) setNextSubject(subject)
+                if (subject) setNextSubject(subject);
             })
 
-    }, [currentSubject]);
+    }, [currentSubject,currentAssignment]);
 
 
     const switchToNextAssignment = () => {
         if (!nextSubject) {
-            setCurrentSubject(null)
-            return
+            setCurrentSubject(null);
+            return;
         }
-        setCurrentSubject(nextSubject)
-        setCurrentAssignment(currentAssignment + 1)
+        setCurrentSubject(nextSubject);
+        setCurrentAssignment(currentAssignment + 1);
 
     }
-    return [currentSubject, switchToNextAssignment, assignments[currentAssignment]]
+    return [currentSubject, switchToNextAssignment, assignments[currentAssignment]];
 }

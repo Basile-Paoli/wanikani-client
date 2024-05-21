@@ -5,14 +5,14 @@ export type Subject = {
     characters: string,
     character_images?: Array<{ url: string }>
     meanings: [
-        meaning: string
+        { meaning: string }
     ],
     readings?: [
-        reading: string
+        { reading: string }
     ],
 
 
-}
+};
 
 async function getSubject(id: number): Promise<Subject | void> {
     return fetch(`${apiUrl}/subjects/${id}`, {
@@ -20,8 +20,8 @@ async function getSubject(id: number): Promise<Subject | void> {
     })
         .then((response) => response.json())
         .then((data) => {
-            return data.data as Subject
-        })
+            return data.data as Subject;
+        });
 }
 
-export default getSubject
+export default getSubject;

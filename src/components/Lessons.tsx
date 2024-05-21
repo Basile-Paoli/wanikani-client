@@ -2,17 +2,15 @@ import {apiUrl} from "../Context.ts";
 import {useSubjectManager} from "../useSubjectManager.ts";
 
 
-
-
-
 function Lessons() {
-    const [currentSubject,switchToNextAssignment, currentAssignment]= useSubjectManager(`${apiUrl}/assignments?immediately_available_for_lessons`)
-    console.log("render")
+    const [currentSubject, switchToNextAssignment, currentAssignment] = useSubjectManager(`${apiUrl}/assignments?immediately_available_for_lessons`);
+    console.log("render");
     return (
         <div>
             {currentSubject ?
                 <>{currentSubject.characters ? <h1>{currentSubject.characters}</h1> :
-                    <img className="h-8" src={currentSubject.character_images[7].url }/>}
+                    <img className="h-8"
+                         src={currentSubject.character_images && currentSubject.character_images[7].url}/>}
                     <button onClick={switchToNextAssignment}>Next
                     </button>
                 </> :
