@@ -3,8 +3,8 @@ import {useSubjectManager} from "../useSubjectManager.ts";
 
 
 function Lessons() {
-    const [currentSubject, switchToNextAssignment, currentAssignment] = useSubjectManager(`${apiUrl}/assignments?immediately_available_for_lessons`);
-    console.log("render");
+    const [currentSubject, switchToNextAssignment] = useSubjectManager(`${apiUrl}/assignments?immediately_available_for_lessons`);
+
     return (
         <div>
             {currentSubject ?

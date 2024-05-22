@@ -62,14 +62,16 @@ function Reviews() {
 
         if (!validMeanings.includes((meaningInputRef.current as HTMLInputElement).value.toLowerCase())) {
             dispatch({type: "meaning"});
+            setIsIncorrect(prev => ({...prev, meaning: true}));
             correct = false;
         }
         if (validReadings.length !== 0 && !validReadings.includes((readingInputRef.current as HTMLInputElement).value.toLowerCase())) {
+
             dispatch({type: "reading"});
+            setIsIncorrect(prev => ({...prev, reading: true}));
             correct = false;
         }
         if (correct) {
-            console.log("correct");
             switchToNextAssignment();
             setIsIncorrect({meaning: false, reading: false});
             dispatch({type: "reset"});
@@ -83,6 +85,7 @@ function Reviews() {
                 incorrect_meaning_answers: mistakes.meaning,
                 incorrect_reading_answers: mistakes.reading
             }
+
             const req = new Request(apiUrl + "/reviews", {
                 body: JSON.stringify({review}),
                 method: "POST",
@@ -91,9 +94,7 @@ function Reviews() {
                     "Content-Type": "application/json"
                 }
             })
-            fetch(req).then((response) => {
-                console.log(response)
-            })
+            fetch(req)
         }
     }
 
@@ -111,29 +112,38 @@ function Reviews() {
                 unbindKana(current);
             }
         }
-    }, [readingInputRef.current]);
+        console.log("effect")
+    });
 
     return (
-        <div>
+        <>
             {currentSubject ?
                 <div>
-                    <span>{capitalizeFirstLetter(currentAssignment.data.subject_type)} : </span>
-                    {currentSubject.characters ?
-                        <h1 className={"font-semibold"}>{currentSubject.characters}</h1> :
-                        <img className="h-8"
-                             src={currentSubject.character_images && currentSubject.character_images[7].url}/>}
-                    <div>Meaning :</div>
-                    <input autoFocus ref={meaningInputRef} onKeyDown={keyPressHandler} type={"text"}/>
-                    {currentAssignment.data.subject_type !== "radical" && <>
-						<div>Reading :</div>
-						<input ref={readingInputRef} onKeyDown={keyPressHandler} type={"text"}/></>}
+                    <div>
+                        <span>{capitalizeFirstLetter(currentAssignment.data.subject_type)} : </span>
+                        {currentSubject.characters ?
+                            <h1 className={"font-semibold"}>{currentSubject.characters}</h1> :
+                            <img className="h-8"
+                                 src={currentSubject.character_images && currentSubject.character_images[7].url}/>}
+                    </div>
+                    <div>
+                        <div>Meaning :</div>
+                        <input autoFocus ref={meaningInputRef} onKeyDown={keyPressHandler} type={"text"}/>
+                        {isIncorrect.meaning && <div className={"text-red-500"}>Incorrect</div>}
+                    </div>
+                    {currentAssignment.data.subject_type !== "radical" &&
+						<div>
+							<div>Reading :</div>
+							<input ref={readingInputRef} onKeyDown={keyPressHandler} type={"text"}/>
+                            {isIncorrect.reading && <div className={"text-red-500"}>Incorrect</div>}
+						</div>}
                     <button onClick={validateHandler}>Valider</button>
 
 
                 </div> :
                 <h1>No reviews</h1>
             }
-        </div>
+        </>
     );
 }
 
