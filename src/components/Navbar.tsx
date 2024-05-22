@@ -3,12 +3,12 @@ import React, {memo, useEffect, useRef, useState} from "react";
 import pog from "../assets/pog.png";
 import {apiUrl} from "../Context";
 
-type propsType = {
+type PropsType = {
     setIsLoggedIn: (isLoggedIn: boolean) => void,
     updatePage: (newPage: string) => void
 }
 
-function Navbar({setIsLoggedIn, updatePage}: propsType) {
+function Navbar({setIsLoggedIn, updatePage}: PropsType) {
 
 
     const [reviewCount, setReviewCount] = useState<number | null>(null)
